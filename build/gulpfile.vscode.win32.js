@@ -140,9 +140,14 @@ function copyInnoUpdater(arch) {
 }
 
 function updateIcon(executablePath) {
-	return cb => {
+	return async cb => {
 		const icon = path.join(repoPath, 'resources', 'win32', 'code.ico');
-		rcedit(executablePath, { icon }, cb);
+		try {
+			await rcedit(executablePath, { icon });
+			cb();
+		} catch (err) {
+			cb(err);
+		}
 	};
 }
 

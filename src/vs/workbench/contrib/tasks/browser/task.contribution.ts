@@ -33,8 +33,6 @@ import { AbstractTaskService, ConfigureTaskAction } from 'vs/workbench/contrib/t
 import { tasksSchemaId } from 'vs/workbench/services/configuration/common/configuration';
 import { Extensions as ConfigurationExtensions, IConfigurationRegistry } from 'vs/platform/configuration/common/configurationRegistry';
 import { WorkbenchStateContext } from 'vs/workbench/browser/contextkeys';
-import { IQuickAccessRegistry, Extensions as QuickAccessExtensions } from 'vs/platform/quickinput/common/quickAccess';
-import { TasksQuickAccessProvider } from 'vs/workbench/contrib/tasks/browser/tasksQuickAccess';
 import { ContextKeyExpr } from 'vs/platform/contextkey/common/contextkey';
 
 const SHOW_TASKS_COMMANDS_CONTEXT = ContextKeyExpr.or(ShellExecutionSupportedContext, ProcessExecutionSupportedContext);
@@ -362,19 +360,6 @@ KeybindingsRegistry.registerKeybindingRule({
 // Tasks Output channel. Register it before using it in Task Service.
 let outputChannelRegistry = Registry.as<IOutputChannelRegistry>(OutputExt.OutputChannels);
 outputChannelRegistry.registerChannel({ id: AbstractTaskService.OutputChannelId, label: AbstractTaskService.OutputChannelLabel, log: false });
-
-
-// Register Quick Access
-const quickAccessRegistry = (Registry.as<IQuickAccessRegistry>(QuickAccessExtensions.Quickaccess));
-const tasksPickerContextKey = 'inTasksPicker';
-
-quickAccessRegistry.registerQuickAccessProvider({
-	ctor: TasksQuickAccessProvider,
-	prefix: TasksQuickAccessProvider.PREFIX,
-	contextKey: tasksPickerContextKey,
-	placeholder: nls.localize('tasksQuickAccessPlaceholder', "Type the name of a task to run."),
-	helpEntries: [{ description: nls.localize('tasksQuickAccessHelp', "Run Task"), needsEditor: false }]
-});
 
 // tasks.json validation
 let schema: IJSONSchema = {
